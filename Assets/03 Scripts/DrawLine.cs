@@ -21,31 +21,15 @@ public class DrawLine : MonoBehaviour
 
     private bool fire = false;
 
+
+    public bool isTouchingBee = false;
+    private GameObject currentBee;
+    
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && cursor.GetComponent<CursorBeh>().isTouchingBee)
-        {
-            CreateLine();
-            fire = true;
-        }
-        else if (Input.GetMouseButtonUp(0) && !cursor.GetComponent<CursorBeh>().isTouchingBee)
-        {
-            //Clear previous positions to get ready to draw a new line
-            mousePositions.Clear();
-
-            //NOTE: we put the two points of our line in the same coordinate...
-            mousePositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            mousePositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            fire = false;
-        }
-        if (Input.GetMouseButton(0) && fire)
-        {
-            Vector2 tempMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Vector2.Distance(tempMousePos, mousePositions[mousePositions.Count - 1]) > lineResolution)
-            {
-                UpdateLine(tempMousePos);
-            }
-        }
+        UpdateCursor();
+        GetInput();
     }
 
     private void CreateLine()
@@ -68,6 +52,47 @@ public class DrawLine : MonoBehaviour
         edgeCollider.points = mousePositions.ToArray();
     }
 
+    
+    private void GetInput()
+    {
+        if (Input.GetMouseButtonDown(0) && isTouchingBee)
+        {
+            CreateLine();
+            fire = true;
+        }
+        else if (Input.GetMouseButtonUp(0) && !isTouchingBee)
+        {
+            ClearLine();
+
+            // Note: we put the line as a child of the bee so we can track it better
+           try
+            {
+                currentLine.transform.parent = currentBee.transform;
+                currentBee = null;
+            }
+            catch
+            {
+                Debug.Log("No bee found!");
+            }
+
+            fire = false;
+        }
+        if (Input.GetMouseButton(0) && fire)
+        {
+            Draw();
+        }
+    }
+
+    #region LineBehaviour
+    
+    private void Draw()
+    {
+        Vector2 tempMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Vector2.Distance(tempMousePos, mousePositions[mousePositions.Count - 1]) > lineResolution)
+        {
+            UpdateLine(tempMousePos);
+        }
+    }
     private void UpdateLine(Vector2 newMousePos)
     {
         mousePositions.Add(newMousePos);
@@ -75,4 +100,42 @@ public class DrawLine : MonoBehaviour
         lr.SetPosition(lr.positionCount - 1, newMousePos);
         edgeCollider.points = mousePositions.ToArray();
     }
+
+    private void ClearLine()
+    {
+        //Clear previous positions to get ready to draw a new line
+        mousePositions.Clear();
+
+        //NOTE: we put the two points of our line in the same coordinate...
+        mousePositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        mousePositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+    }
+    #endregion
+
+    #region Cursor Behaviour
+    private void UpdateCursor()
+    {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        gameObject.transform.position = mousePosition;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Bee")
+        {
+            isTouchingBee = true;
+            currentBee = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Bee")
+        {
+            isTouchingBee = false;
+            
+        }
+    }
+
+    #endregion
 }
