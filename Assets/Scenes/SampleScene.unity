@@ -357,9 +357,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PR_line: {fileID: 5528475632815677030, guid: 0cec69ddda18ffa43b6e1253b9a1d537, type: 3}
-  cursor: {fileID: 0}
+  cursor: {fileID: 1949812973}
   lineResolution: 0.5
-  mousePositions: []
+  mousePositions:
+  - {x: 0, y: 0}
 --- !u!4 &1078158857
 Transform:
   m_ObjectHideFlags: 0
