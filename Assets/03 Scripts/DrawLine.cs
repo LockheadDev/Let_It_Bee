@@ -54,7 +54,7 @@ public class DrawLine : MonoBehaviour
             CreateLine();
             fire = true;
         }
-        else if (Input.GetMouseButtonUp(0) && !isTouchingBee)
+        else if (Input.GetMouseButtonUp(0))
         {
             ClearLine();
 
@@ -66,7 +66,7 @@ public class DrawLine : MonoBehaviour
             }
             catch
             {
-                Debug.Log("No bee found!");
+                Debug.Log("Path couldn't get assigned to a bee!");
             }
 
             fire = false;

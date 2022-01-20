@@ -10,7 +10,9 @@ public class BeeBeh : MonoBehaviour
     private bool at_destination = true;
     public List<FlowerColor> flwers_q;
 
-    private float movement_speed = 0.01f;
+    [SerializeField]
+    private float movement_speed = 10f;
+
 
     private void Start()
     {
@@ -47,8 +49,9 @@ public class BeeBeh : MonoBehaviour
             Vector2 temp_vec = path_lr.GetPosition(0);
             Vector2 transform_position_v2 = transform.position;
             Vector2 final_pos_v2 = path_lr.GetPosition(path_lr.positionCount-1);
-            
-            transform.position = Vector2.MoveTowards(transform.position, temp_vec, movement_speed);
+
+            float step_mov = movement_speed * Time.deltaTime;
+            transform.position = Vector2.MoveTowards(transform.position, temp_vec, step_mov);
             
             //TODO: Rotation
             /*
@@ -60,7 +63,7 @@ public class BeeBeh : MonoBehaviour
             if(transform_position_v2 == temp_vec)
             {
                 path_lr.SetPosition(0, path_lr.GetPosition(1));
-                path_lr.Simplify(0.00001f);
+                path_lr.Simplify(0.01f);
             }
 
             if (transform_position_v2 == final_pos_v2)
@@ -84,10 +87,14 @@ public class BeeBeh : MonoBehaviour
         if(collision.gameObject.tag == "Flower")
         {
             FlowerBeh flower = collision.gameObject.GetComponent<FlowerBeh>();
-            if(flower.flower_clr==flwers_q[0])
+
+            if (flwers_q.Count > 0)
             {
-                flower.DiscountPetals(1);
-                flwers_q.RemoveAt(0);
+                if (flower.flower_clr == flwers_q[0])
+                {
+                    flower.DiscountPetals(1);
+                    flwers_q.RemoveAt(0);
+                }
             }
 
         }
