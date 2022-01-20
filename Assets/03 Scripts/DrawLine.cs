@@ -6,25 +6,21 @@ public class DrawLine : MonoBehaviour
 {
     [SerializeField]
     private GameObject PR_line;
-    [SerializeField]
-    private GameObject cursor;
 
     [SerializeField]
-    private float lineResolution = 0.5f;
-
+    private float lineResolution = 0.01f;
 
     private GameObject currentLine;
-
     private LineRenderer lr;
-    private EdgeCollider2D edgeCollider;
     public List<Vector2> mousePositions;
 
     private bool fire = false;
 
 
-    public bool isTouchingBee = false;
+    private bool isTouchingBee = false;
     private GameObject currentBee;
-    
+    public bool IsTouchingBee { get => isTouchingBee; /*set => isTouchingBee = value;*/ }
+
 
     void Update()
     {
@@ -37,7 +33,6 @@ public class DrawLine : MonoBehaviour
         
         currentLine = Instantiate(PR_line,Vector3.zero, Quaternion.identity);
         lr = currentLine.GetComponent<LineRenderer>();
-        edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
 
         //Clear previous positions to get ready to draw a new line
         mousePositions.Clear();
@@ -49,7 +44,6 @@ public class DrawLine : MonoBehaviour
         lr.SetPosition(0, mousePositions[0]);
         lr.SetPosition(1, mousePositions[1]);
 
-        edgeCollider.points = mousePositions.ToArray();
     }
 
     
@@ -98,7 +92,6 @@ public class DrawLine : MonoBehaviour
         mousePositions.Add(newMousePos);
         lr.positionCount++;
         lr.SetPosition(lr.positionCount - 1, newMousePos);
-        edgeCollider.points = mousePositions.ToArray();
     }
 
     private void ClearLine()
@@ -138,4 +131,6 @@ public class DrawLine : MonoBehaviour
     }
 
     #endregion
+
+    
 }
