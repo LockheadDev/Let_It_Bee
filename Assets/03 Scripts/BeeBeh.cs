@@ -1,66 +1,131 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BeeBeh : MonoBehaviour
 {
     private LineRenderer path_lr;
 
     [SerializeField]
+    private BeeState beeState;
     private bool at_destination = true;
+    private Vector2 targetIdle;
+
     public List<FlowerColor> flwers_q;
 
     [SerializeField]
-    private float movement_speed = 10f;
+    private float movementSpeed = 10f;
+
+    [SerializeField]
+    private float idleMovementSpeed = 1f;
 
 
-    private void Start()
+    private bool fire = false;
+
+    [Space]
+    [Header("GUI Bee Settings")]
+    public List<Image> imgs = new List<Image>();
+    private void OnEnable()
     {
-        int temp_rand_q_length = Random.Range(1, 5);
-        for (int i = 0; i < temp_rand_q_length; i++)
+        foreach (Image image in imgs)
         {
-            flwers_q.Add(RandomFlowerClr());
+            image.gameObject.SetActive(false);
         }
-
+        UpdateGUI();
     }
     void Update()
     {
-        DepurePathTrails();
-        FollowTrail();
+       
+        switch (beeState)
+        {
+            case BeeState.idle:
+                at_destination = true;
+                IdleBeh();
+                break;
+            case BeeState.following:
+                fire = false;
+                DepurePathTrails();
+                FollowTrail();
+                break;
+            default:
+                break;
+        }
+        if(at_destination==true)
+        {
+            if (!fire)
+            {
+                fire = true;
+                targetIdle = BeeSpawner.Instance.GetRandomPos();
+            }
+            beeState = BeeState.idle;
+        }
+        else if(at_destination==false)
+        {
+            beeState = BeeState.following;
+        }
+        if(transform.GetComponentInChildren<LineRenderer>()!=false )//If we have children paths we follow them...
+        {
+            beeState = BeeState.following;
+        }
+    }
+    void UpdateGUI()
+    {
+        Color temp_clr = Color.clear;
+        for (int i = 0; i < flwers_q.Count; i++)
+        {
+            switch (flwers_q[i])
+            {
+                case FlowerColor.red:
+                    temp_clr = Color.red;
+                    break;
+                case FlowerColor.blue:
+                    temp_clr = Color.blue;
+                    break;
+                case FlowerColor.green:
+                    temp_clr = Color.green;
+                    break;
+            }
+            imgs[i].color = temp_clr;
+            imgs[i].gameObject.SetActive(true);
+        }
+    }
+    void IdleBeh()
+    {
+        float step_mov = idleMovementSpeed * Time.deltaTime;
+        transform.position = Vector2.MoveTowards(transform.position, targetIdle, step_mov);
+        if ((Vector2)transform.position == targetIdle) fire = false;
     }
 
     void DepurePathTrails()
     {
-        foreach (Transform child in transform)
+        LineRenderer[] lr = transform.GetComponentsInChildren<LineRenderer>();
+        if(lr.Length>1)
         {
-            if (transform.childCount > 1)
-            {
-                Destroy(transform.GetChild(0).gameObject);
-            }
+            Destroy(lr[0].gameObject);
         }
     }
-
     void FollowTrail()
     {
-        try
-        {
+        try { 
+            path_lr = transform.GetComponentInChildren<LineRenderer>().gameObject.GetComponent<LineRenderer>();
             at_destination = false;
-            path_lr = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
+
             Vector2 temp_vec = path_lr.GetPosition(0);
             Vector2 transform_position_v2 = transform.position;
-            Vector2 final_pos_v2 = path_lr.GetPosition(path_lr.positionCount-1);
+            Vector2 final_pos_v2 = path_lr.GetPosition(path_lr.positionCount - 1);
 
-            float step_mov = movement_speed * Time.deltaTime;
+            float step_mov = movementSpeed * Time.deltaTime;
             transform.position = Vector2.MoveTowards(transform.position, temp_vec, step_mov);
-            
+
             //TODO: Rotation
             /*
             Vector2 newRot = Vector3.RotateTowards(transform.up, temp_vec, singleStepRot, 0.0f);
             transform.LookAt(temp_vec,Vector3.up); 
             */
-            
+
             //TODO: BUG that line cuts out
-            if(transform_position_v2 == temp_vec)
+            if (transform_position_v2 == temp_vec)
             {
                 path_lr.SetPosition(0, path_lr.GetPosition(1));
                 path_lr.Simplify(0.01f);
@@ -69,6 +134,7 @@ public class BeeBeh : MonoBehaviour
             if (transform_position_v2 == final_pos_v2)
             {
                 at_destination = true;
+                beeState = BeeState.idle;
                 Destroy(path_lr.gameObject);
             }
 
@@ -76,7 +142,9 @@ public class BeeBeh : MonoBehaviour
         }
         catch
         {
-            Debug.Log("No path found!");
+            at_destination = true;
+            beeState = BeeState.idle;
+            Debug.Log(gameObject.name.ToString() + " " + gameObject.GetInstanceID().ToString() +" waiting for orders");
         }
 
     }
@@ -100,30 +168,15 @@ public class BeeBeh : MonoBehaviour
         }
         else if(collision.gameObject.tag == "Panal" && flwers_q.Count == 0)
         {
+
             //TODO Score Points on singleton
-
-            //TODO Object pooling
-            Destroy(gameObject);
+            if(gameObject.transform.childCount>0)
+            {
+                Destroy(gameObject.transform.GetComponentInChildren<LineRenderer>().gameObject);
+            }
+            gameObject.SetActive(false);
         }
 
     }
 
-    #region FlowerBehaviour
-    private FlowerColor RandomFlowerClr()
-    {
-        int temp_int = Random.Range(0, 4);
-        switch (temp_int)
-        {
-            case 1:
-                return FlowerColor.red;
-            case 2:
-                return FlowerColor.green;
-            case 3:
-                return FlowerColor.blue;
-        }
-        return FlowerColor.red;
-
-    }
-
-    #endregion
 }

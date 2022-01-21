@@ -198,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611757982700688880}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.0158195, y: -0.0825057, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5435779847403799236}
@@ -218,8 +218,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   petalsText: {fileID: 8363035031425591217}
-  petals: 0
-  flower_clr: 3
+  petals: 5
+  flower_clr: 2
 --- !u!212 &1611757982700688886
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class DrawLine : MonoBehaviour
     public List<Vector2> mousePositions;
 
     private bool fire = false;
+    private bool fire2 = false;
 
 
     private bool isTouchingBee = false;
@@ -57,7 +58,7 @@ public class DrawLine : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
         {
             ClearLine();
-
+            fire2 = false;
             // Note: we put the line as a child of the bee so we can track it better
            try
             {
@@ -114,8 +115,9 @@ public class DrawLine : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Bee")
+        if (other.gameObject.tag == "Bee" && !fire2)
         {
+            fire2 = true;
             isTouchingBee = true;
             currentBee = other.gameObject;
         }

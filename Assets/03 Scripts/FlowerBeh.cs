@@ -13,9 +13,11 @@ public class FlowerBeh : MonoBehaviour
     [SerializeField]
     private int petals = 1;
 
-    public FlowerColor flower_clr;
+    public bool isColliding = false;
 
     private SpriteRenderer spr_rend;
+
+    public FlowerColor flower_clr;
 
     public int Petals { get => petals; set => petals = value; }
 
@@ -50,11 +52,18 @@ public class FlowerBeh : MonoBehaviour
         }
     }
 
-    public virtual void DiscountPetals(int count)
+    public  void DiscountPetals(int count)
     {
         petals -= count;
         //OBJECT Pooling!!
         if (petals <= 0) gameObject.SetActive(false);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        string temp_tag = collision.gameObject.tag;
+        if (temp_tag == "Flower"|| temp_tag == "Panal") gameObject.SetActive(false);
+    }
+
 
 }
