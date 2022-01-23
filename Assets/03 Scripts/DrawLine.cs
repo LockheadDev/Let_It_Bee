@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DrawLine : MonoBehaviour
 {
+
+    public static DrawLine Instance;
+
     [SerializeField]
     private GameObject PR_line;
 
@@ -14,25 +17,21 @@ public class DrawLine : MonoBehaviour
     private LineRenderer lr;
     public List<Vector2> mousePositions;
 
-    private bool fire = false;
-    private bool fire2 = false;
-
 
     private bool isTouchingBee = false;
-    private GameObject currentBee;
     public bool IsTouchingBee { get => isTouchingBee; /*set => isTouchingBee = value;*/ }
+    public GameObject CurrentLine { get => currentLine; set => currentLine = value; }
 
-
-    void Update()
+    private void Start()
     {
-        UpdateCursor();
-        GetInput();
+        Instance = this;
     }
 
-    private void CreateLine()
+    #region LineBehaviour
+    public void CreateLine()
     {
-        
-        currentLine = Instantiate(PR_line,Vector3.zero, Quaternion.identity);
+
+        currentLine = Instantiate(PR_line, Vector3.zero, Quaternion.identity);
         lr = currentLine.GetComponent<LineRenderer>();
 
         //Clear previous positions to get ready to draw a new line
@@ -46,41 +45,7 @@ public class DrawLine : MonoBehaviour
         lr.SetPosition(1, mousePositions[1]);
 
     }
-
-    
-    private void GetInput()
-    {
-        if (Input.GetMouseButtonDown(0) && isTouchingBee)
-        {
-            CreateLine();
-            fire = true;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            ClearLine();
-            fire2 = false;
-            // Note: we put the line as a child of the bee so we can track it better
-           try
-            {
-                currentLine.transform.parent = currentBee.transform;
-                currentBee = null;
-            }
-            catch
-            {
-                Debug.Log("Path couldn't get assigned to a bee!");
-            }
-
-            fire = false;
-        }
-        if (Input.GetMouseButton(0) && fire)
-        {
-            Draw();
-        }
-    }
-
-    #region LineBehaviour
-    
-    private void Draw()
+    public void Draw()
     {
         Vector2 tempMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Vector2.Distance(tempMousePos, mousePositions[mousePositions.Count - 1]) > lineResolution)
@@ -95,7 +60,7 @@ public class DrawLine : MonoBehaviour
         lr.SetPosition(lr.positionCount - 1, newMousePos);
     }
 
-    private void ClearLine()
+    public void ClearLine()
     {
         //Clear previous positions to get ready to draw a new line
         mousePositions.Clear();
@@ -104,34 +69,6 @@ public class DrawLine : MonoBehaviour
         mousePositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         mousePositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }
-    #endregion
-
-    #region Cursor Behaviour
-    private void UpdateCursor()
-    {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        gameObject.transform.position = mousePosition;
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "Bee" && !fire2)
-        {
-            fire2 = true;
-            isTouchingBee = true;
-            currentBee = other.gameObject;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "Bee")
-        {
-            isTouchingBee = false;
-            
-        }
-    }
-
     #endregion
 
     

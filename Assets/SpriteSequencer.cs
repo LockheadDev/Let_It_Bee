@@ -30,8 +30,29 @@ public class SpriteSequencer : MonoBehaviour
         {
             Invoke("CycleNextSprite", cycleSpeed);
         }
+        
     }
+    private void LateUpdate()
+    {
+        //Sprite rotation
+        try
+        {
+            if (!GetComponent<BeeBeh>().LookinRight)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else
+            {
+                spriteRenderer.flipX = false;
+            }
 
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("No direction found for sprite rotation!");
+            throw;
+        }
+    }
     private void CycleNextSprite()
     {
         spriteRenderer.sprite = sprites[cycleCount];

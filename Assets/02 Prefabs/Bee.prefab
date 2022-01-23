@@ -85,10 +85,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2625857540511961343}
   - component: {fileID: 2625857540511961342}
-  - component: {fileID: 2625857540511961336}
   - component: {fileID: 2625857540511961337}
   - component: {fileID: 2625857540511961338}
   - component: {fileID: 733331428189042896}
+  - component: {fileID: 3996688856673395364}
   m_Layer: 0
   m_Name: Bee
   m_TagString: Bee
@@ -151,7 +151,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6a20638abea31714a9e87f418f4a7704, type: 3}
   m_Color: {r: 1, g: 0.80392164, b: 0.26666668, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -162,22 +162,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &2625857540511961336
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2625857540511961341}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: eaf7068d29e1c2441b21118acea377c7, type: 2}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
-  m_Direction: 0
 --- !u!50 &2625857540511961337
 Rigidbody2D:
   serializedVersion: 4
@@ -212,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beeState: 0
+  at_destination: 0
   flwers_q: 
   movementSpeed: 8
   idleMovementSpeed: 1.25
@@ -232,11 +217,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df41341c8de306045af616d2b6a6b01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cycleSpeed: 1
+  cycleSpeed: 0.7
   cycleCount: 0
   sprites:
   - {fileID: 21300000, guid: 6a20638abea31714a9e87f418f4a7704, type: 3}
   - {fileID: 21300000, guid: bcd092387b907754b812a657cee310ca, type: 3}
+--- !u!58 &3996688856673395364
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2625857540511961341}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.6
 --- !u!1 &2908102592835318042
 GameObject:
   m_ObjectHideFlags: 0

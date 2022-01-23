@@ -41,7 +41,6 @@ public class BeeSpawner : MonoBehaviour
             absBound_y = b_col.size.y / 2;
         }
         else Debug.Log("Not idling area found");
-        SpawnRandomBee();
     }
     private void Update()
     {
@@ -104,7 +103,7 @@ public class BeeSpawner : MonoBehaviour
         temp_go.SetActive(true);
     }
 
-    private List<FlowerColor> GetRandomColorList()
+    List<FlowerColor> GetRandomColorList()
     {
         List<FlowerColor> flwers_q = new List<FlowerColor>();
         int temp_rand_q_length = Random.Range(1, 5);
