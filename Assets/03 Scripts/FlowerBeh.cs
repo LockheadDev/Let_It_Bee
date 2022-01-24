@@ -6,14 +6,21 @@ using UnityEngine;
 
 public class FlowerBeh : MonoBehaviour
 {
-    //Debug Section
+    
+    [Header("Flower Settings")]
+    [SerializeField]
+    private int petals = 1;
+    public bool isColliding = false;
+    [SerializeField]
+    private int scoreValue = 20;
+
+    [Space]
+
+    [Header("GUI Settings")]
     [SerializeField]
     private TextMeshPro petalsText;
 
-    [SerializeField]
-    private int petals = 1;
-
-    public bool isColliding = false;
+    
 
     private SpriteRenderer spr_rend;
 
@@ -55,8 +62,12 @@ public class FlowerBeh : MonoBehaviour
     public  void DiscountPetals(int count)
     {
         petals -= count;
-        //OBJECT Pooling!!
-        if (petals <= 0) gameObject.SetActive(false);
+        if (petals <= 0)
+        {
+            GameManager.instance.IncrementScore(scoreValue);
+            gameObject.SetActive(false);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

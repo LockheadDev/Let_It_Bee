@@ -18,9 +18,17 @@ public class BeeSpawner : MonoBehaviour
     [SerializeField]
     private float padd = 3f;
 
+    [Space]
+
+    [Header("Bee spawn settings")]
+    [SerializeField]
+    private int minFlowers_q = 1;
+    [SerializeField]
+    private int maxFlowers_q= 4;
     private BoxCollider2D b_col;
     private float absBound_x, absBound_y; //Idling bounds
     private float h, w;
+    private int currentSection = 0;
 
     public float AbsBound_x { get => absBound_x; set => absBound_x = value; }
     public float AbsBound_y { get => absBound_y; set => absBound_y = value; }
@@ -68,7 +76,8 @@ public class BeeSpawner : MonoBehaviour
         float pos_x = 0;
         float pos_y = 0;
         int latcher = Random.Range(0, 4);
-
+        if (currentSection == latcher) latcher = 3; // Spawn on top..
+        currentSection = latcher;
         switch (latcher)
         {
             case 0:
@@ -106,7 +115,7 @@ public class BeeSpawner : MonoBehaviour
     List<FlowerColor> GetRandomColorList()
     {
         List<FlowerColor> flwers_q = new List<FlowerColor>();
-        int temp_rand_q_length = Random.Range(1, 5);
+        int temp_rand_q_length = Random.Range(minFlowers_q, maxFlowers_q+1);
         for (int i = 0; i < temp_rand_q_length; i++)
         {
             label: 

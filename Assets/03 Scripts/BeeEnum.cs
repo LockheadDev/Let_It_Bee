@@ -1,6 +1,6 @@
 public enum BeeState
 {
-    idle,following
+    idle,following,stopped
 }
 
 public class BeeEnum 

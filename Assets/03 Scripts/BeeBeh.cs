@@ -20,6 +20,8 @@ public class BeeBeh : MonoBehaviour
     private float movementSpeed = 10f;
     [SerializeField]
     private float idleMovementSpeed = 1f;
+    [SerializeField]
+    private int scoreValue = 10;
 
     [Space]
 
@@ -65,6 +67,9 @@ public class BeeBeh : MonoBehaviour
         UpdateGUI();
         switch (beeState)
         {
+            case BeeState.stopped:
+                
+                break;
             case BeeState.idle:
                 at_destination = true;
                 IdleBeh();
@@ -124,16 +129,12 @@ public class BeeBeh : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        //Sprite direction
-    }
     void FollowTrail()
     {
         try { 
             at_destination = false;
 
-             temp_vec = lrPath.GetPosition(beeLinePos);
+            temp_vec = lrPath.GetPosition(beeLinePos);
             Vector2 transform_position_v2 = transform.position;
             Vector2 final_pos_v2 = lrPath.GetPosition(lrPath.positionCount - 1);
             
@@ -141,11 +142,12 @@ public class BeeBeh : MonoBehaviour
             float step_mov = movementSpeed * Time.deltaTime;
             transform.position = Vector2.MoveTowards(transform.position, temp_vec, step_mov);
 
-            if (temp_vec.x != transform.position.x && temp_vec.x < transform.position.x)
+            //Direction flag
+            if ( temp_vec.x < transform.position.x)
             {
                 lookinRight = false;
             }
-            else
+            else if(temp_vec.x > transform.position.x)
             {
                 lookinRight = true;
             }
@@ -160,7 +162,11 @@ public class BeeBeh : MonoBehaviour
             
             if ((Vector2)transform.position == temp_vec)
             {
-                lrPath.SetPosition(beeLinePos, transform.position);
+                for (int i = 0; i < beeLinePos; i++)
+                {
+                    lrPath.SetPosition(i, transform.position);
+                }
+                
                 beeLinePos++;
                 if (beeLinePos >= lrPath.positionCount) beeLinePos = 0;
             }
@@ -187,20 +193,22 @@ public class BeeBeh : MonoBehaviour
     #region BeeInput
     private void OnMouseDown()
     {
+        
+        DrawLine.Instance.ClearLine();
         DrawLine.Instance.CreateLine();
-
         lineRenderers.Enqueue(DrawLine.Instance.CurrentLine.GetComponent<LineRenderer>());
 
         
     }
     private void OnMouseDrag()
     {
+        beeState = BeeState.stopped;
         DrawLine.Instance.Draw();
     }
     private void OnMouseUp()
     {
         DrawLine.Instance.ClearLine();
-
+        beeLinePos = 0;
         if(lineRenderers.Count>1)
         {
             Destroy(lineRenderers.Dequeue().gameObject);
@@ -234,11 +242,18 @@ public class BeeBeh : MonoBehaviour
                 if (flwers_q.Count == 0)
                 {
                     DestroyLineRenderer();
+                    GameManager.instance.IncrementScore(scoreValue);
                     gameObject.SetActive(false);
                 }
                 break;
             case "Bee":
-                print(" Minus liveeeee!!");
+
+                // Make sure this methods are called once
+                if (gameObject.GetInstanceID() > go.GetInstanceID())
+                {
+                    GameManager.instance.DecrementScore(scoreValue);
+                    GameManager.instance.DecrementLives(1);
+                }
                 break;
 
             default:
