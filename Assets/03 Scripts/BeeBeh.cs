@@ -1,4 +1,6 @@
 using System.Collections;
+using TMPro;
+using MoreMountains.Feedbacks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +12,10 @@ public class BeeBeh : MonoBehaviour
     private BeeState beeState;
     [SerializeField]
     private bool at_destination;
-    
+    public List<FlowerColor> flwers_q;
 
     [Space]
-
-    public List<FlowerColor> flwers_q;
+    
     [Header("Bee settings")]
     [SerializeField]
     private float movementSpeed = 10f;
@@ -27,6 +28,10 @@ public class BeeBeh : MonoBehaviour
 
     [Header("GUI Bee Settings")]
     public List<Image> imgs = new List<Image>();
+
+    [Header("Feedbacks")]
+    [SerializeField]
+    private MMFeedbacks DamageFeedback;
 
     //Bee behaviour
     private Vector2 targetIdle;
@@ -50,6 +55,7 @@ public class BeeBeh : MonoBehaviour
         beeState = BeeState.idle;
         fire = false;
         at_destination = true;
+        DamageFeedback.GetComponentInChildren<MMFeedbackTMPColor>().TargetTMPText = GameObject.Find("ScoreNum").gameObject.GetComponent<TextMeshProUGUI>();
     }
     private void OnEnable()
     {
@@ -61,6 +67,7 @@ public class BeeBeh : MonoBehaviour
             image.gameObject.SetActive(false);
         }
         UpdateGUI();
+       
     }
     void Update()
     {
@@ -187,7 +194,6 @@ public class BeeBeh : MonoBehaviour
             beeState = BeeState.idle;
             Debug.Log(gameObject.name.ToString() + " " + gameObject.GetInstanceID().ToString() +" waiting for orders");
         }
-
     }
 
     #region BeeInput
@@ -197,7 +203,6 @@ public class BeeBeh : MonoBehaviour
         DrawLine.Instance.ClearLine();
         DrawLine.Instance.CreateLine();
         lineRenderers.Enqueue(DrawLine.Instance.CurrentLine.GetComponent<LineRenderer>());
-
         
     }
     private void OnMouseDrag()
@@ -247,10 +252,11 @@ public class BeeBeh : MonoBehaviour
                 }
                 break;
             case "Bee":
-
+                
                 // Make sure this methods are called once
                 if (gameObject.GetInstanceID() > go.GetInstanceID())
                 {
+                    DamageFeedback?.PlayFeedbacks();
                     GameManager.instance.DecrementScore(scoreValue);
                     GameManager.instance.DecrementLives(1);
                 }

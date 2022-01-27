@@ -45,18 +45,10 @@ public class FlowerBeh : MonoBehaviour
 
     private void UpdateColor()
     {
-        switch (flower_clr)
-        {
-            case FlowerColor.red:
-                spr_rend.color = Color.red;
-                break;
-            case FlowerColor.green:
-                spr_rend.color = Color.green;
-                break;
-            case FlowerColor.blue:
-                spr_rend.color = Color.blue;
-                break;
-        }
+        Color clr =  FlowerEnum.GetColor(flower_clr);
+        spr_rend.color = clr;
+        petalsText.color = clr;
+        
     }
 
     public  void DiscountPetals(int count)

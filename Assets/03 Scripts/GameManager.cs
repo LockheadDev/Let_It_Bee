@@ -3,12 +3,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [HideInInspector]
     public static GameManager instance;
+
+    [Header("Game Status")]
     public Modes gameStatus = Modes.running;
 
     public int score, lives;
 
     public int highScore;
+
+
+    
 
     private void Awake()
     {
@@ -82,5 +88,9 @@ public class GameManager : MonoBehaviour
         gameStatus = Modes.over;
         print("Game Over!");
         SaveHighScores();
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
