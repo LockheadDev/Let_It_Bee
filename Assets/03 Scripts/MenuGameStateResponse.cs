@@ -1,25 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuGameStateResponse : MonoBehaviour, IGameStateResponse
 {
     [Header("Menu Settings")]
     [SerializeField]
-    private GameObject pauseMenu;
-    private void Start()
+    private GameObject pauseGUI;
+    [SerializeField]
+    private GameObject gameOverGUI;
+
+    private void Update()
     {
-        pauseMenu.SetActive(false);
+        gameObject.SetActive(true);
+    }
+    private void Awake()
+    {
+        pauseGUI.SetActive(false);
+        gameOverGUI.SetActive(false);
     }
     public void Pause()
     {
-        pauseMenu.SetActive(true);
+        pauseGUI.SetActive(true);
     }
 
     public void Resume()
     {
-        pauseMenu.SetActive(false);
+        pauseGUI.SetActive(false);
+        gameOverGUI.SetActive(false);
     }
 
-
+    public void Over()
+    {
+        gameOverGUI.SetActive(true);
+    }
 }

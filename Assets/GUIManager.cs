@@ -1,28 +1,26 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GUIManager : MonoBehaviour
 {
-
-
-    [Header("Game values")]
+    [Header("GUI Game response")]
     [SerializeField]
-    private TextMeshProUGUI score;
-    private ILiveResponse liveResponse;
     private IGameStateResponse gameStateResponse;
-
-    private void Awake()
+    private void Start()
     {
-        liveResponse = GetComponent<ILiveResponse>();
-        gameStateResponse = GetComponent<IGameStateResponse>();
+        try
+        {
+            gameStateResponse = GetComponent<IGameStateResponse>();
+        }
+        catch
+        {
+            Debug.LogError("No Game State Response found!");
+        }
+        
     }
     void Update()
     {
-        score.text = GameManager.instance.score.ToString();
-        liveResponse.SetLive(GameManager.instance.lives);
-
         Modes gameSatus = GameManager.instance.gameStatus;
+
         switch (gameSatus)
         {
             case Modes.running:
@@ -32,10 +30,8 @@ public class GUIManager : MonoBehaviour
                 gameStateResponse.Pause();
                 break;
             case Modes.over:
-                break;
-            default:
+                gameStateResponse.Over();
                 break;
         }
     }
 }
-

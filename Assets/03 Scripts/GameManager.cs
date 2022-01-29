@@ -7,22 +7,27 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [Header("Game Status")]
-    public Modes gameStatus = Modes.running;
+    public Modes gameStatus;
 
     public int score, lives;
 
     public int highScore;
 
+    public int hasPlayed;
 
-    
+    public float timeer;
 
     private void Awake()
     {
+        gameStatus = Modes.running;
         if (instance == null) instance = this;
+        hasPlayed = PlayerPrefs.GetInt("HasPlayed");
+        if (hasPlayed == 0) FirstTime();
+        DontDestroyOnLoad(gameObject);
     }
+
     void GetHighScore()
     {
-        
         if (PlayerPrefs.HasKey("highScore"))
             highScore = PlayerPrefs.GetInt("highScore");
     }
@@ -30,7 +35,9 @@ public class GameManager : MonoBehaviour
     void SaveHighScores()
     {
         if (score > highScore)
+        {
             PlayerPrefs.SetInt("highScore", score);
+        }
     }
 
     public void IncrementScore(int num)
@@ -78,16 +85,25 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GetHighScore();
+        lives = 3;
+            score = 0;
         Time.timeScale = 1;
         gameStatus = Modes.running;
     }
+
     public void EndGame()
     {
-
+        SaveHighScores();
         Time.timeScale = 0;
         gameStatus = Modes.over;
-        print("Game Over!");
-        SaveHighScores();
+    }
+
+    private void FirstTime()
+    {
+        Debug.Log("First Time");
+        gameStatus = Modes.paused;
+        Time.timeScale = 0;
+        PlayerPrefs.SetInt("HasPlayed", 1);
     }
     public void QuitGame()
     {

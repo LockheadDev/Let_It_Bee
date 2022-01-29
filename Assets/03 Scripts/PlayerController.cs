@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
         if((GameManager.instance.gameStatus == Modes.paused || GameManager.instance.gameStatus == Modes.over) && Input.GetKeyDown(restartButton))
         {
             GameManager.instance.RestartGame();
+            GameManager.instance.StartGame();
         }
 
     }

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: 04B_30__ SDF
+  m_Name: Default3
   m_EditorClassIdentifier: 
-  hashCode: 1448835371
+  hashCode: 91266712
   material: {fileID: 2475442612809319760}
-  materialHashCode: 94083115
+  materialHashCode: -1936849096
   m_Version: 1.1.0
   m_SourceFontFileGUID: ba0c494000c23544f8a550d65242e2c5
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: ba0c494000c23544f8a550d65242e2c5, type: 3}
@@ -2422,7 +2422,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Ambient: 0.5
-    - _Bevel: 0.5
+    - _Bevel: 0
     - _BevelClamp: 0
     - _BevelOffset: 0
     - _BevelRoundness: 0
@@ -2432,13 +2432,13 @@ Material:
     - _ColorMask: 15
     - _CullMode: 0
     - _Diffuse: 0.5
-    - _FaceDilate: 0
+    - _FaceDilate: -0.461
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
-    - _GlowInner: 0.023
-    - _GlowOffset: 0.64
-    - _GlowOuter: 0.486
-    - _GlowPower: 0.059
+    - _GlowInner: 1
+    - _GlowOffset: -1
+    - _GlowOuter: 1
+    - _GlowPower: 0.271
     - _GradientScale: 6
     - _LightAngle: 3.1416
     - _MaskSoftnessX: 0
@@ -2446,15 +2446,15 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.312
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
-    - _ScaleRatioB: 0.6013174
-    - _ScaleRatioC: 0.4513889
+    - _ScaleRatioB: 1.06125
+    - _ScaleRatioC: 0.7075
     - _ScaleX: 1
     - _ScaleY: 1
-    - _ShaderFlags: 0
+    - _ShaderFlags: 1
     - _Sharpness: 0
     - _SpecularPower: 2
     - _Stencil: 0
@@ -2476,9 +2476,9 @@ Material:
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
     - _EnvMatrixRotation: {r: 0, g: 0, b: 0, a: 0}
     - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
-    - _GlowColor: {r: 0.93333334, g: 1.3333334, b: 0.09411765, a: 1}
+    - _GlowColor: {r: 1.7489794, g: 1.6831183, b: 0.22685508, a: 1}
     - _MaskCoord: {r: 0, g: 0, b: 32767, a: 32767}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 0.14117648, g: 0.36078432, b: 0.32941177, a: 1}
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
