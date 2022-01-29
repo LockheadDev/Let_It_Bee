@@ -534,7 +534,6 @@ GameObject:
   - component: {fileID: 1624177088897714400}
   - component: {fileID: 1348144548816427625}
   - component: {fileID: 951382670}
-  - component: {fileID: 951382671}
   - component: {fileID: 951382672}
   m_Layer: 0
   m_Name: DamageFeedback
@@ -573,7 +572,7 @@ MonoBehaviour:
   - {fileID: 1348144548816427625}
   - {fileID: 951382670}
   - {fileID: 951382672}
-  - {fileID: 951382671}
+  - {fileID: 0}
   InitializationMode: 2
   SafeMode: 3
   Direction: 0
@@ -678,8 +677,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  RemapOrthographicSizeZero: 12
-  RemapOrthographicSizeOne: 11.5
+  RemapOrthographicSizeZero: 11
+  RemapOrthographicSizeOne: 10.4
 --- !u!114 &951382670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -756,109 +755,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   Amplitude: 0.3
   RelativeIntensity: 0
---- !u!114 &951382671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8050984527577235640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95b169d46d63cf046ba0d25f314cae64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Active: 1
-  Label: TMP Color
-  Chance: 100
-  Timing:
-    TimescaleMode: 0
-    InitialDelay: 0.1
-    CooldownDuration: 0
-    ExcludeFromHoldingPauses: 0
-    InterruptsOnStop: 1
-    NumberOfRepeats: 0
-    RepeatForever: 0
-    DelayBetweenRepeats: 1
-    MMFeedbacksDirectionCondition: 0
-    PlayDirection: 0
-    ConstantIntensity: 0
-    UseIntensityInterval: 0
-    IntensityIntervalMin: 0
-    IntensityIntervalMax: 0
-    Sequence: {fileID: 0}
-    TrackID: 0
-    Quantized: 0
-    TargetBPM: 120
-  DebugActive: 0
-  TargetTMPText: {fileID: 0}
-  ColorMode: 1
-  Duration: 0.35
-  InstantColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  ColorGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 0.8588236, g: 0.3137255, b: 0.26666668, a: 1}
-    key2: {r: 1, g: 1, b: 1, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 31804
-    ctime2: 64957
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  DestinationColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  ColorCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  AllowAdditivePlays: 0
 --- !u!114 &951382672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -895,7 +791,7 @@ MonoBehaviour:
     TargetBPM: 120
   DebugActive: 0
   BoundSpriteRenderer: {fileID: 2625857540511961342}
-  Mode: 0
+  Mode: 4
   Duration: 0.25
   StartsOff: 0
   Channel: 0

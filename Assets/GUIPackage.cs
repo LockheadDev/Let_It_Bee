@@ -8,7 +8,7 @@ public class GUIPackage : MonoBehaviour
     private GameObject pauseMenu;
     public void ResumeButton()
     {
-        GameManager.instance.gameStatus = Modes.running;
+        GameManager.instance.ResumeGame();
         pauseMenu.SetActive(false);
     }
 

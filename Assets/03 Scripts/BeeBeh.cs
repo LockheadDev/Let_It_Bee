@@ -55,7 +55,7 @@ public class BeeBeh : MonoBehaviour
         beeState = BeeState.idle;
         fire = false;
         at_destination = true;
-        DamageFeedback.GetComponentInChildren<MMFeedbackTMPColor>().TargetTMPText = GameObject.Find("ScoreNum").gameObject.GetComponent<TextMeshProUGUI>();
+   
     }
     private void OnEnable()
     {
@@ -252,7 +252,6 @@ public class BeeBeh : MonoBehaviour
                 }
                 break;
             case "Bee":
-                
                 // Make sure this methods are called once
                 if (gameObject.GetInstanceID() > go.GetInstanceID())
                 {
