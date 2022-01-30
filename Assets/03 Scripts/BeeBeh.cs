@@ -1,10 +1,6 @@
 using System.Collections;
-using TMPro;
-using MoreMountains.Feedbacks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
 public class BeeBeh : MonoBehaviour
 {
     [Header("Bee Status")]
@@ -22,16 +18,8 @@ public class BeeBeh : MonoBehaviour
     [SerializeField]
     private float idleMovementSpeed = 1f;
     [SerializeField]
-    private int scoreValue = 10;
+    public int scoreValue = 10;
 
-    [Space]
-
-    [Header("GUI Bee Settings")]
-    public List<Image> imgs = new List<Image>();
-
-    [Header("Feedbacks")]
-    [SerializeField]
-    private MMFeedbacks DamageFeedback;
 
     //Bee behaviour
     private Vector2 targetIdle;
@@ -43,12 +31,17 @@ public class BeeBeh : MonoBehaviour
     private int beeLinePos = 0;
 
     //Line Beh
-        //-FIFO structure for always having just one path
+    //-FIFO structure for always having just one path
     private Queue<LineRenderer> lineRenderers = new Queue<LineRenderer>();
     private LineRenderer lrPath;
 
+    private IUIResponse beeUIResponse;
     public bool LookinRight { get => lookinRight; set => lookinRight = value; }
 
+    private void Awake()
+    {
+        beeUIResponse = GetComponent<BeeUIResponse>();
+    }
     private void Start()
     {
         beeLinePos = 0;
@@ -59,24 +52,16 @@ public class BeeBeh : MonoBehaviour
     }
     private void OnEnable()
     {
-        //Sanity variable restart 
+        //Sanity restart on enable
         Start();
-        //GUI Handlers
-        foreach (Image image in imgs)
-        {
-            image.gameObject.SetActive(false);
-        }
-        UpdateGUI();
-       
+        beeUIResponse.UpdateGUI();
     }
     void Update()
     {
-        //Dificult level
-        UpdateGUI();
+        beeUIResponse.UpdateGUI();
         switch (beeState)
         {
             case BeeState.stopped:
-                
                 break;
             case BeeState.idle:
                 at_destination = true;
@@ -107,29 +92,13 @@ public class BeeBeh : MonoBehaviour
             beeState = BeeState.following;
         }
     }
-    void UpdateGUI()
-    {
-        Color temp_clr = Color.clear;
-        //Clear Images
-        foreach (Image img in imgs)
-        {
-            img.gameObject.SetActive(false);
-        }
-        //Fill Images
-        for (int i = 0; i < flwers_q.Count; i++)
-        {
-            temp_clr = FlowerEnum.GetColor(flwers_q[i]);
-            imgs[i].color = temp_clr;
-            imgs[i].gameObject.SetActive(true);
-        }
-    }
     void IdleBeh()
     {
         float step_mov = idleMovementSpeed * Time.deltaTime;
         transform.position = Vector2.MoveTowards(transform.position, targetIdle, step_mov);
         if ((Vector2)transform.position == targetIdle) fire = false;
 
-        //Sprite rotation
+        //Sprite direction
         if (targetIdle.x < transform.position.x) lookinRight = false;
         else
         {
@@ -160,11 +129,6 @@ public class BeeBeh : MonoBehaviour
                 lookinRight = true;
             }
 
-            //TODO: Rotation
-            /*
-            Vector2 newRot = Vector3.RotateTowards(transform.up, temp_vec, singleStepRot, 0.0f);
-            transform.LookAt(temp_vec,Vector3.up); 
-            */
 
             //TODO: BUG that line cuts out
             
@@ -200,11 +164,10 @@ public class BeeBeh : MonoBehaviour
     #region BeeInput
     private void OnMouseDown()
     {
-        
         DrawLine.Instance.ClearLine();
         DrawLine.Instance.CreateLine();
         lineRenderers.Enqueue(DrawLine.Instance.CurrentLine.GetComponent<LineRenderer>());
-        
+
     }
     private void OnMouseDrag()
     {
@@ -215,7 +178,7 @@ public class BeeBeh : MonoBehaviour
     {
         DrawLine.Instance.ClearLine();
         beeLinePos = 0;
-        if(lineRenderers.Count>1)
+        if (lineRenderers.Count > 1)
         {
             Destroy(lineRenderers.Dequeue().gameObject);
         }
@@ -225,61 +188,11 @@ public class BeeBeh : MonoBehaviour
     }
     #endregion
 
-    #region Collisions
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        GameObject go = collision.gameObject;
-        string go_tag = collision.gameObject.tag;
-        switch (go_tag)
-        {
-            case "Flower":
-                if (flwers_q.Count > 0)
-                {
-                    if (go.GetComponent<FlowerBeh>().flower_clr == flwers_q[0])
-                    {
-                        go.GetComponent<FlowerBeh>().DiscountPetals(1);
-                        flwers_q.RemoveAt(0);
-                        AudioManager.instance.PlayAudio(AudioClp.pickFlower);
-                    }
-                }
-                break;
 
-            case "Panal":
-                //Score points on singleton
-                if (flwers_q.Count == 0)
-                {
-                    AudioManager.instance.PlayAudio(AudioClp.destination);
-                    DestroyLineRenderer();
-                    GameManager.instance.IncrementScore(scoreValue);
-                    GameManager.instance.IncrementBees(1);
-                    gameObject.SetActive(false);
-                }
-                
-                break;
-            case "Bee":
-                // Make sure this methods are called once
-                if (gameObject.GetInstanceID() > go.GetInstanceID())
-                {
-                    AudioManager.instance.PlayAudio(AudioClp.crash);
-                    if(!AudioManager.instance.GetPlayingBackgroundHard())AudioManager.instance.PlayAudio(AudioClp.backgroundHard);
-                    DamageFeedback?.PlayFeedbacks();
-                    GameManager.instance.DecrementScore(scoreValue);
-                    GameManager.instance.DecrementLives(1);
-                }
-                break;
-
-            default:
-                break;
-        }
-       
-
-    }
-
-    private void DestroyLineRenderer()
+    public void DestroyLineRenderer()
     {
         lineRenderers.Clear();
         Destroy(lrPath.gameObject);
     }
-    #endregion
 
 }
