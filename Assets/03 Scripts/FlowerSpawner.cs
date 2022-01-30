@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class FlowerSpawner : MonoBehaviour
 {
-    public static FlowerSpawner Instance;
+    
 
         private BoxCollider2D b_col;
         private float absBound_x, absBound_y;
@@ -31,8 +31,6 @@ public class FlowerSpawner : MonoBehaviour
 
     void Start()
     {
-
-        Instance = this;
 
         //Spawn Bounds
         if (gameObject.TryGetComponent(typeof(BoxCollider2D), out Component component))

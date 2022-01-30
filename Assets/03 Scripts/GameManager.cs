@@ -15,12 +15,19 @@ public class GameManager : MonoBehaviour
 
     public int hasPlayed;
 
-    public float timeer;
+    public int beesDunked;
 
     private void Awake()
     {
         gameStatus = Modes.running;
-        if (instance == null) instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         hasPlayed = PlayerPrefs.GetInt("HasPlayed");
         if (hasPlayed == 0) FirstTime();
         DontDestroyOnLoad(gameObject);
@@ -43,6 +50,11 @@ public class GameManager : MonoBehaviour
     public void IncrementScore(int num)
     {
         score += num;
+    }
+
+    public void IncrementBees(int num)
+    {
+        beesDunked += num;
     }
 
     public void DecrementScore(int num)
@@ -85,14 +97,17 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GetHighScore();
+
         lives = 3;
-            score = 0;
+        score = 0;
+        beesDunked = 0;
         Time.timeScale = 1;
         gameStatus = Modes.running;
     }
 
     public void EndGame()
     {
+        AudioManager.instance.PlayAudio(AudioClp.gameOver);
         SaveHighScores();
         Time.timeScale = 0;
         gameStatus = Modes.over;

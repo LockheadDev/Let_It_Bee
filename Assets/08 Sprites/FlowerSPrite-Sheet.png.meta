@@ -36,6 +36,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -232,6 +233,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      FlowerSPrite-Sheet_2: -2855953157383989055
+      FlowerSPrite-Sheet_0: 3367450972548546639
+      FlowerSPrite-Sheet_1: -8734993208466458616
+      FlowerSPrite-Sheet_3: -5487277919658205018
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

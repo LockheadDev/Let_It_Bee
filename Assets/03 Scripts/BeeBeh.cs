@@ -71,6 +71,7 @@ public class BeeBeh : MonoBehaviour
     }
     void Update()
     {
+        //Dificult level
         UpdateGUI();
         switch (beeState)
         {
@@ -93,7 +94,7 @@ public class BeeBeh : MonoBehaviour
             if (!fire)
             {
                 fire = true;
-                targetIdle = BeeSpawner.Instance.GetRandomPos();
+                targetIdle = GameObject.Find("BeeSpawner").GetComponent<BeeSpawner>().GetRandomPos();
             }
             beeState = BeeState.idle;
         }
@@ -238,6 +239,7 @@ public class BeeBeh : MonoBehaviour
                     {
                         go.GetComponent<FlowerBeh>().DiscountPetals(1);
                         flwers_q.RemoveAt(0);
+                        AudioManager.instance.PlayAudio(AudioClp.pickFlower);
                     }
                 }
                 break;
@@ -246,15 +248,20 @@ public class BeeBeh : MonoBehaviour
                 //Score points on singleton
                 if (flwers_q.Count == 0)
                 {
+                    AudioManager.instance.PlayAudio(AudioClp.destination);
                     DestroyLineRenderer();
                     GameManager.instance.IncrementScore(scoreValue);
+                    GameManager.instance.IncrementBees(1);
                     gameObject.SetActive(false);
                 }
+                
                 break;
             case "Bee":
                 // Make sure this methods are called once
                 if (gameObject.GetInstanceID() > go.GetInstanceID())
                 {
+                    AudioManager.instance.PlayAudio(AudioClp.crash);
+                    if(!AudioManager.instance.GetPlayingBackgroundHard())AudioManager.instance.PlayAudio(AudioClp.backgroundHard);
                     DamageFeedback?.PlayFeedbacks();
                     GameManager.instance.DecrementScore(scoreValue);
                     GameManager.instance.DecrementLives(1);

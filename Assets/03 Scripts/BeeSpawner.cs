@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BeeSpawner : MonoBehaviour
 {
-    public static BeeSpawner Instance;
 
     [Header("Spawner Settings")]
     [SerializeField]
@@ -33,9 +32,9 @@ public class BeeSpawner : MonoBehaviour
     public float AbsBound_x { get => absBound_x; set => absBound_x = value; }
     public float AbsBound_y { get => absBound_y; set => absBound_y = value; }
 
+    private bool latch = true;
     private void Start()
     {
-        Instance = this;
 
         float height = 2f * Camera.main.orthographicSize;
         float width = height * Camera.main.aspect;
@@ -53,6 +52,8 @@ public class BeeSpawner : MonoBehaviour
     private void Update()
     {
         //Bees limitations at a time
+        UpdateDif();
+
         if (BeePool.Instance.GetActiveBees() < minActiveBees)
         {
             SpawnRandomBee();
@@ -70,12 +71,62 @@ public class BeeSpawner : MonoBehaviour
             Invoke("SpawnRandomBee", temp_sec);
         }
     }
+    
+    private void UpdateDif()
+    {
+        int num = GameManager.instance.beesDunked;
+        switch (num)
+        {
+            case 10:
+                if(latch)
+                IncreaseDiff(1);
+                latch = false;
+                break;
+            case 25:
+                if (latch)
+                    IncreaseDiff(1);
+                latch = false;
+                break;
+            case 35:
+                if (latch)
+                    IncreaseDiff(1);
+                latch = false;
+                break;
+            case 50:
+                if (latch)
+                    IncreaseDiff(1);
+                latch = false;
+                break;
+            case 80:
+                if (latch)
+                    IncreaseDiff(2);
+                latch = false;
+                break;
+            case 100:
+                if (latch)
+                    IncreaseDiff(3);
+                latch = false;
+                break;
+            default:
+                latch = true;
+                break;
+        }
+    }
+    private void IncreaseDiff(int num)
+    {
+        minActiveBees+=num;
+        maxActiveBees+=num;
+    }
     private void SpawnRandomBee()
     {
 
         float pos_x = 0;
         float pos_y = 0;
         int latcher = Random.Range(0, 4);
+        while (currentSection==latcher)
+        {
+            latcher = Random.Range(0, 4); ;
+        }
         if (currentSection == latcher) latcher = 3; // Spawn on top..
         currentSection = latcher;
         switch (latcher)
