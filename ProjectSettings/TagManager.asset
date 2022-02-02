@@ -44,6 +44,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3707410513
+    locked: 0
+  - name: GameElements
+    uniqueID: 1099748363
+    locked: 0
   - name: GameText
     uniqueID: 1229025117
+    locked: 0
+  - name: HUD
+    uniqueID: 2110393255
+    locked: 0
+  - name: GUI
+    uniqueID: 3012384577
     locked: 0

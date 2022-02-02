@@ -5,7 +5,7 @@ public class BeeBeh : MonoBehaviour
 {
     [Header("Bee Status")]
     [SerializeField]
-    private BeeState beeState;
+    public BeeState beeState;
     [SerializeField]
     private bool at_destination;
     public List<FlowerColor> flwers_q;
@@ -19,6 +19,10 @@ public class BeeBeh : MonoBehaviour
     private float idleMovementSpeed = 1f;
     [SerializeField]
     public int scoreValue = 10;
+    [SerializeField]
+    public int flowerScoreValue = 10;
+    [SerializeField]
+    private DrawLine drawLine;
 
 
     //Bee behaviour
@@ -32,10 +36,15 @@ public class BeeBeh : MonoBehaviour
 
     //Line Beh
     //-FIFO structure for always having just one path
-    private Queue<LineRenderer> lineRenderers = new Queue<LineRenderer>();
-    private LineRenderer lrPath;
+    [HideInInspector]
+    public Queue<LineRenderer> lineRenderers = new Queue<LineRenderer>();
+    [HideInInspector]
+    public LineRenderer lrPath;
 
     private IUIResponse beeUIResponse;
+   
+    private SpriteRenderer spr;
+
     public bool LookinRight { get => lookinRight; set => lookinRight = value; }
 
     private void Awake()
@@ -48,7 +57,7 @@ public class BeeBeh : MonoBehaviour
         beeState = BeeState.idle;
         fire = false;
         at_destination = true;
-   
+        spr = GetComponent<SpriteRenderer>();
     }
     private void OnEnable()
     {
@@ -92,6 +101,28 @@ public class BeeBeh : MonoBehaviour
             beeState = BeeState.following;
         }
     }
+
+    private void LateUpdate()
+    {
+        //Sprite rotation
+        try
+        {
+            if (!LookinRight)
+            {
+                spr.flipX = true;
+            }
+            else
+            {
+                spr.flipX = false;
+            }
+
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("No direction found for sprite rotation!");
+            throw;
+        }
+}
     void IdleBeh()
     {
         float step_mov = idleMovementSpeed * Time.deltaTime;
@@ -161,22 +192,22 @@ public class BeeBeh : MonoBehaviour
         }
     }
 
-    #region BeeInput
     private void OnMouseDown()
     {
-        DrawLine.Instance.ClearLine();
-        DrawLine.Instance.CreateLine();
-        lineRenderers.Enqueue(DrawLine.Instance.CurrentLine.GetComponent<LineRenderer>());
+        print("imhere");
+        drawLine.ClearLine();
+        drawLine.CreateLine();
+        lineRenderers.Enqueue(drawLine.CurrentLine.GetComponent<LineRenderer>());
 
     }
     private void OnMouseDrag()
     {
         beeState = BeeState.stopped;
-        DrawLine.Instance.Draw();
+        drawLine.Draw();
     }
     private void OnMouseUp()
     {
-        DrawLine.Instance.ClearLine();
+        drawLine.ClearLine();
         beeLinePos = 0;
         if (lineRenderers.Count > 1)
         {
@@ -186,7 +217,6 @@ public class BeeBeh : MonoBehaviour
         beeState = BeeState.following;
 
     }
-    #endregion
 
 
     public void DestroyLineRenderer()

@@ -5,8 +5,6 @@ using UnityEngine;
 public class DrawLine : MonoBehaviour
 {
 
-    public static DrawLine Instance;
-
     [SerializeField]
     private GameObject PR_line;
 
@@ -21,11 +19,6 @@ public class DrawLine : MonoBehaviour
     private bool isTouchingBee = false;
     public bool IsTouchingBee { get => isTouchingBee; /*set => isTouchingBee = value;*/ }
     public GameObject CurrentLine { get => currentLine; set => currentLine = value; }
-
-    private void Start()
-    {
-        Instance = this;
-    }
 
     #region LineBehaviour
     public void CreateLine()

@@ -70,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1099748363
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 3367450972548546639, guid: d5b93028e33b2e24ca7d361fcc0b8828, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 5435779847403799236}
   - component: {fileID: 2179114982791339906}
   - component: {fileID: 8363035031425591217}
+  - component: {fileID: 5297463828285879646}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -256,6 +257,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 2179114982791339906}
   m_maskType: 0
+--- !u!114 &5297463828285879646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521683347173872016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69ca166c75d8084b9e58cd121470c04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingLayer: GameText
 --- !u!1 &1611757982700688880
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,8 +364,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1099748363
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -8734993208466458616, guid: d5b93028e33b2e24ca7d361fcc0b8828, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -481,8 +495,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1099748363
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -2855953157383989055, guid: d5b93028e33b2e24ca7d361fcc0b8828, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -565,8 +579,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1099748363
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -5487277919658205018, guid: d5b93028e33b2e24ca7d361fcc0b8828, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
