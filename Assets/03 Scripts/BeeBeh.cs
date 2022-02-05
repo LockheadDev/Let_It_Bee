@@ -8,6 +8,7 @@ public class BeeBeh : MonoBehaviour
     public BeeState beeState;
     [SerializeField]
     private bool at_destination;
+    public bool onCombo = false;
     public List<FlowerColor> flwers_q;
 
     [Space]
@@ -68,9 +69,11 @@ public class BeeBeh : MonoBehaviour
     void Update()
     {
         beeUIResponse.UpdateGUI();
+        if (!onCombo) gameObject.BroadcastMessage("DisableMultiplier");
         switch (beeState)
         {
             case BeeState.stopped:
+                onCombo = false;
                 break;
             case BeeState.idle:
                 at_destination = true;
@@ -125,6 +128,7 @@ public class BeeBeh : MonoBehaviour
 }
     void IdleBeh()
     {
+        onCombo = false;
         float step_mov = idleMovementSpeed * Time.deltaTime;
         transform.position = Vector2.MoveTowards(transform.position, targetIdle, step_mov);
         if ((Vector2)transform.position == targetIdle) fire = false;
@@ -141,7 +145,7 @@ public class BeeBeh : MonoBehaviour
     {
         try { 
             at_destination = false;
-
+            onCombo = true;
             temp_vec = lrPath.GetPosition(beeLinePos);
             Vector2 transform_position_v2 = transform.position;
             Vector2 final_pos_v2 = lrPath.GetPosition(lrPath.positionCount - 1);
@@ -194,7 +198,6 @@ public class BeeBeh : MonoBehaviour
 
     private void OnMouseDown()
     {
-        print("imhere");
         drawLine.ClearLine();
         drawLine.CreateLine();
         lineRenderers.Enqueue(drawLine.CurrentLine.GetComponent<LineRenderer>());

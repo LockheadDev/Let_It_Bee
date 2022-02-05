@@ -9,7 +9,7 @@ public class FlowerBeh : MonoBehaviour
     
     [Header("Flower Settings")]
     [SerializeField]
-    private int petals = 1;
+    public int petals = 1;
     public bool isColliding = false;
     [SerializeField]
     private int scoreValue = 20;
