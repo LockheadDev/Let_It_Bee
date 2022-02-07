@@ -76,10 +76,12 @@ public class BeeBeh : MonoBehaviour
                 onCombo = false;
                 break;
             case BeeState.idle:
+                onCombo = false;
                 at_destination = true;
                 IdleBeh();
                 break;
             case BeeState.following:
+                onCombo = true;
                 fire = false;
                 FollowTrail();
                 break;

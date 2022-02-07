@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        AudioManager.instance.PlayAudio(AudioClp.gameOver);
         SaveHighScores();
         Time.timeScale = 0;
         gameStatus = Modes.over;

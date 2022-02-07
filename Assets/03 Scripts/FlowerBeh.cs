@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +21,17 @@ public class FlowerBeh : MonoBehaviour
     [SerializeField]
     private TextMeshPro petalsText;
 
+    [Space]
     
+    [Header("Feedbacks")]
+    [SerializeField]
+    private MMFeedbacks highlightFeedback;
+    [SerializeField]
+    private MMFeedbacks pickupFeedback;
+    [SerializeField]
+    private MMFeedbacks DispawnFeedback;
+
+
 
     private SpriteRenderer spr_rend;
 
@@ -54,10 +65,14 @@ public class FlowerBeh : MonoBehaviour
     public  void DiscountPetals(int count)
     {
         petals -= count;
+
+        if(petals ==1 ) highlightFeedback.PlayFeedbacks();
+        pickupFeedback.PlayFeedbacks();
+
         if (petals <= 0)
         {
             GameManager.instance.IncrementScore(scoreValue);
-            gameObject.SetActive(false);
+            Dissapear();
         }
 
     }
@@ -65,8 +80,18 @@ public class FlowerBeh : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         string temp_tag = collision.gameObject.tag;
-        if (temp_tag == "Flower"|| temp_tag == "Panal") gameObject.SetActive(false);
+        if (temp_tag == "Panal")Dissapear();
+        if (temp_tag == "Flower" && collision.gameObject.GetInstanceID() > gameObject.GetInstanceID()) Dissapear();
     }
 
+    private void Dissapear()
+    {
+        DispawnFeedback.PlayFeedbacks();
+        Invoke("SetInactive",DispawnFeedback.TotalDuration);
+    }
+    private void SetInactive()
+    {
+        gameObject.SetActive(false);
+    }
 
 }

@@ -11,7 +11,11 @@ public class BeeCollisionManager : MonoBehaviour
     [SerializeField]
     private MMFeedbacks DamageFeedback;
     [SerializeField]
-    private MMFeedbacks PointsFeedback;
+    private MMFeedbacks BadPointsFeedback;
+    [SerializeField]
+    private MMFeedbacks PointsHighFeedback;
+    [SerializeField]
+    private MMFeedbacks PointsLowFeedback;
     [SerializeField]
     private MMFeedbacks PanalFeedback;
     [SerializeField]
@@ -19,15 +23,24 @@ public class BeeCollisionManager : MonoBehaviour
     [SerializeField]
     private int multiplier = 1;
 
-    [Header("Effects")]
+    [Header("Pitch Effects")]
     [SerializeField]
-    private MMFeedbackSound pointsFeedbackSound;
-    [SerializeField]
-    private MMFeedbackFloatingText floatingText_low;
-    [SerializeField]
-    private MMFeedbackFloatingText floatingText_high;
+    private List<MMFeedbackSound> pointsFeedbackSounds = new List<MMFeedbackSound>();
     [SerializeField]
     private float pitchStep = 0.25f;
+
+    private void Start()
+    {
+        //We obtain elements for pitch changing
+        foreach (var item in PointsLowFeedback.Feedbacks)
+        {
+            if (item.Label == "FX_Sound") pointsFeedbackSounds.Add((MMFeedbackSound)item);
+        }
+        foreach (var item in PointsHighFeedback.Feedbacks)
+        {
+            if (item.Label == "FX_Sound") pointsFeedbackSounds.Add((MMFeedbackSound)item);
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         List<FlowerColor> flwers_q = goBeeBeh.GetComponent<BeeBeh>().flwers_q;
@@ -43,15 +56,21 @@ public class BeeCollisionManager : MonoBehaviour
                 {
                     if (bee.GetComponent<FlowerBeh>().flower_clr == flwers_q[0])
                     {
+                        //Score calculation
                         if (bee.GetComponent<FlowerBeh>().Petals == 1) multiplier = multiplier*2;
                         int temp_score = flowerScoreValue * multiplier ;
-                        if (temp_score >= 50) EnableHigh(); else EnableLow();
 
-                        //AudioManager.instance.PlayAudio(AudioClp.pickFlower);
+                        //Feedbacks
+                        PlayOnScore(temp_score);
+
+                        //Game variabes changes
+                        GameManager.instance.IncrementScore(temp_score);
+
+                        //Bee variable changes
                         bee.GetComponent<FlowerBeh>().DiscountPetals(1);
                         flwers_q.RemoveAt(0);
-                        PointsFeedback?.PlayFeedbacks(this.transform.position,temp_score);
-                        GameManager.instance.IncrementScore(temp_score);
+
+                        //Multiplier behaviour
                         ComboPlus();
                         
                     }
@@ -62,17 +81,22 @@ public class BeeCollisionManager : MonoBehaviour
                 //Score points on singleton
                 if (flwers_q.Count == 0)
                 {
+                    //Score calculation
                     int temp_score = scoreValue * (multiplier + 1);
-                    if (temp_score >= 50) EnableHigh(); else EnableLow();
-                    //AudioManager.instance.PlayAudio(AudioClp.destination);
-                    goBeeBeh.SendMessage("DestroyLineRenderer");
-                    GameManager.instance.IncrementBees(1);
-                    PointsFeedback?.PlayFeedbacks(this.transform.position, temp_score);
-                    GameManager.instance.IncrementScore(temp_score);
+
+                    //Feedbacks
+                    PlayOnScore(temp_score);
                     PanalFeedback?.PlayFeedbacks();
+
+                    //Game variables changes
+                    GameManager.instance.IncrementBees(1);
+                    GameManager.instance.IncrementScore(temp_score);
+
+                    //Manage despawning
+                    goBeeBeh.SendMessage("DestroyLineRenderer");
                     goBeeBeh.SetActive(false);
                     DisableMultiplier();
-                    
+
                 }
 
                 break;
@@ -80,12 +104,16 @@ public class BeeCollisionManager : MonoBehaviour
                 // Make sure this methods are called once
                 if (gameObject.GetInstanceID() > bee.GetInstanceID())
                 {
-                    //AudioManager.instance.PlayAudio(AudioClp.crash);
-                    if (!AudioManager.instance.GetPlayingBackgroundHard()) AudioManager.instance.PlayAudio(AudioClp.backgroundHard);
+                    
+                    //Feedbacks
+                    PlayOnScore(-scoreValue);
                     DamageFeedback?.PlayFeedbacks();
-                    GameManager.instance.DecrementScore(scoreValue);
-                    PointsFeedback?.PlayFeedbacks(this.transform.position, -scoreValue);
+                    MusicManger.instance.PlayDamageMusic();
+
+
+                    //Game variables changes
                     GameManager.instance.DecrementLives(1);
+                    GameManager.instance.DecrementScore(scoreValue);
                     DisableMultiplier();
                 }
                 break;
@@ -96,27 +124,40 @@ public class BeeCollisionManager : MonoBehaviour
 
 
     }
+
+    private void PlayOnScore(int score) //Play different feedbacks based on score
+    {
+        if(score<0)
+        {
+            BadPointsFeedback?.PlayFeedbacks(transform.position, score);
+
+        }
+        else if (score>=0 && score <50)
+        {
+            PointsLowFeedback?.PlayFeedbacks(transform.position, score);
+        }
+        else if (score>=50)
+        {
+            PointsHighFeedback?.PlayFeedbacks(transform.position, score);
+        }
+    }
     public void DisableMultiplier()
     {
         multiplier = 1;
-        pointsFeedbackSound.MaxPitch = 1;
-        pointsFeedbackSound.MinPitch = 1;
-        EnableLow();
+        Debug.Log("reset");
+        foreach (MMFeedbackSound sound in pointsFeedbackSounds)
+        {
+            sound.MaxPitch = 1;
+            sound.MinPitch = 1;
+        }
     }
     private void ComboPlus()
     {
         multiplier++;
-        pointsFeedbackSound.MaxPitch+=pitchStep;
-        pointsFeedbackSound.MinPitch+= pitchStep;
-    }
-    private void EnableHigh()
-    {
-        floatingText_low.Active = false;
-        floatingText_high.Active = true;
-    }
-    private void EnableLow()
-    {
-        floatingText_low.Active = true;
-        floatingText_high.Active = false;
+        foreach (MMFeedbackSound sound in pointsFeedbackSounds)
+        {
+            sound.MaxPitch += pitchStep;
+            sound.MinPitch += pitchStep;
+        }
     }
 }
